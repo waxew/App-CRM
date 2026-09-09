@@ -1,9 +1,11 @@
 package com.wcrm.core.repository.di
 
 import com.wcrm.core.domain.repository.CustomerRepository
+import com.wcrm.core.domain.repository.InventoryRepository
 import com.wcrm.core.domain.repository.InvoiceRepository
 import com.wcrm.core.domain.repository.ProductRepository
 import com.wcrm.core.repository.customer.CustomerRepositoryImpl
+import com.wcrm.core.repository.inventory.InventoryRepositoryImpl
 import com.wcrm.core.repository.invoice.InvoiceRepositoryImpl
 import com.wcrm.core.repository.product.ProductRepositoryImpl
 import dagger.Binds
@@ -35,4 +37,10 @@ abstract class RepositoryModule {
     abstract fun bindInvoiceRepository(
         implementation: InvoiceRepositoryImpl
     ): InvoiceRepository
+
+    /** پیاده‌سازی Repository موجودی را در اختیار Domain قرار می‌دهد. */
+    @Binds
+    abstract fun bindInventoryRepository(
+        implementation: InventoryRepositoryImpl
+    ): InventoryRepository
 }
