@@ -1,17 +1,38 @@
 package com.wcrm.core.repository.product
 
+import com.wcrm.core.database.dao.ProductDao
 import com.wcrm.core.domain.repository.ProductRepository
+import com.wcrm.core.model.Product
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
- * پیاده‌سازی Repository محصول در لایه داده.
+ * پیاده‌سازی Repository محصول.
  *
- * این کلاس باید قرارداد ProductRepository را به ProductDao و مدل‌های Room متصل کند
- * و تبدیل بین ProductEntity و مدل دامنه Product را انجام دهد.
- *
- * اتصال عملیاتی کامل به Room هنوز در این مرحله تکمیل نشده و در فاز اتصال
- * Repository به DAO پیاده‌سازی خواهد شد.
+ * این کلاس مرز بین Domain و Room است.
  */
-class ProductRepositoryImpl @Inject constructor() : ProductRepository {
-    // عملیات واقعی داده‌های محصول در مرحله اتصال به ProductDao تکمیل می‌شود.
+class ProductRepositoryImpl @Inject constructor(
+    private val dao: ProductDao
+) : ProductRepository {
+
+    override fun observeProducts(): Flow<List<Product>> =
+        dao.getProducts().map { list -> list.map(ProductMapper::toDomain) }
+
+    override suspend fun getProductById(id: Long): Product? =
+        dao.getById(id)?.let(ProductMapper::toDomain)
+
+    override suspend fun addProduct(product: Product): Long =
+        dao.insert(ProductMapper.toEntity(product))
+
+    override suspend fun updateProduct(product: Product) {
+        dao.update(ProductMapper.toEntity(product))
+    }
+
+    override suspend fun deleteProduct(id: Long) {
+        dao.getById(id)?.let { dao.delete(it) }
+    }
+
+    override fun searchProducts(query: String): Flow<List<Product>> =
+        dao.search(query).map { list -> list.map(ProductMapper::toDomain) }
 }
