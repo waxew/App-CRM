@@ -3,6 +3,7 @@ package com.wcrm.core.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.wcrm.core.database.entity.CustomerEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -16,20 +17,36 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CustomerDao {
 
-    /**
-     * تمام مشتری‌ها را به صورت واکنشی و بر اساس جدیدترین رکورد برمی‌گرداند.
-     *
-     * استفاده از [Flow] باعث می‌شود تغییرات جدول به صورت خودکار به لایه‌های بالاتر
-     * منتقل شود و UI بتواند بدون Polling دوباره‌سازی شود.
-     */
+    /** تمام مشتری‌ها را به صورت واکنشی و بر اساس جدیدترین رکورد برمی‌گرداند. */
     @Query("SELECT * FROM customers ORDER BY createdAt DESC")
     fun getCustomers(): Flow<List<CustomerEntity>>
 
-    /**
-     * یک رکورد مشتری را در جدول ذخیره می‌کند.
-     *
-     * اعتبارسنجی داده باید قبل از رسیدن به این لایه و در Domain انجام شده باشد.
-     */
+    /** مشتری مشخص‌شده را بر اساس شناسه بازیابی می‌کند. */
+    @Query("SELECT * FROM customers WHERE id = :id LIMIT 1")
+    suspend fun getById(id: Long): CustomerEntity?
+
+    /** رکورد مشتری را ذخیره کرده و شناسه ثبت‌شده را برمی‌گرداند. */
     @Insert
-    suspend fun insert(customer: CustomerEntity)
+    suspend fun insert(customer: CustomerEntity): Long
+
+    /** رکورد موجود مشتری را به‌روزرسانی می‌کند. */
+    @Update
+    suspend fun update(customer: CustomerEntity)
+
+    /** مشتری را بر اساس شناسه حذف می‌کند. */
+    @Query("DELETE FROM customers WHERE id = :id")
+    suspend fun deleteById(id: Long)
+
+    /** جست‌وجوی واکنشی بر اساس نام، تلفن، موبایل یا ایمیل. */
+    @Query(
+        """
+        SELECT * FROM customers
+        WHERE name LIKE '%' || :query || '%'
+           OR phone LIKE '%' || :query || '%'
+           OR mobile LIKE '%' || :query || '%'
+           OR email LIKE '%' || :query || '%'
+        ORDER BY createdAt DESC
+        """
+    )
+    fun search(query: String): Flow<List<CustomerEntity>>
 }
