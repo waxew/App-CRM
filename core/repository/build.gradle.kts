@@ -7,3 +7,9 @@ android {
     namespace = "com.wcrm.core.repository"
     compileSdk = 35
 }
+
+dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:database"))
+    implementation(project(":core:model"))
+}
