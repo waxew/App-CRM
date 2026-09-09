@@ -23,6 +23,16 @@ kotlin {
     jvmToolchain(17)
 }
 
+/**
+ * خروجی Schemaهای Room برای کنترل Migration در مخزن نگه‌داری می‌شود.
+ * تغییر ساختار دیتابیس باید همراه Schema جدید و Migration بررسی شود.
+ */
+kapt {
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+}
+
 dependencies {
     implementation(project(":core:model"))
 
