@@ -13,13 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.wcrm.business.profile.schema.BusinessModule
 import com.wcrm.core.common.config.AppConfig
 import com.wcrm.feature.dashboard.DashboardScreen
+import com.wcrm.feature.product.DynamicProductForm
 import com.wcrm.runtime.RuntimeBootstrap
 import com.wcrm.runtime.RuntimeContext
 import kotlinx.coroutines.launch
 
-private enum class AppSection { HOME, MODULES, SETTINGS, NOTIFICATIONS, ABOUT, CONTACT, SHARE, BACKUP, UPDATE }
+private enum class AppSection { HOME, MODULES, PRODUCT_FORM, SETTINGS, NOTIFICATIONS, ABOUT, CONTACT, SHARE, BACKUP, UPDATE }
 
 /**
  * پوسته عمومی همه برنامه‌های ساخته‌شده از این Core.
@@ -63,7 +65,11 @@ fun WCrmApp() {
             Box(Modifier.padding(padding).fillMaxSize()) {
                 when (section) {
                     AppSection.HOME -> DashboardScreen(runtime.businessProfile)
-                    AppSection.MODULES -> ProfileSchemaPage(runtime)
+                    AppSection.MODULES -> ProfileSchemaPage(
+                        runtime = runtime,
+                        onOpenProductForm = { section = AppSection.PRODUCT_FORM }
+                    )
+                    AppSection.PRODUCT_FORM -> DynamicProductForm(runtime.businessProfile)
                     AppSection.SETTINGS -> SimplePage("تنظیمات\nپروفایل فعال: ${runtime.businessProfile.name}\nTheme: ${runtime.theme.themeKey}")
                     AppSection.NOTIFICATIONS -> SimplePage("اعلان‌ها\nشما اعلان جدیدی ندارید")
                     AppSection.ABOUT -> SimplePage("درباره نرم‌افزار\n${AppConfig.Company.aboutText}\n\n${AppConfig.Company.displayName}")
@@ -144,15 +150,28 @@ private fun DrawerRow(icon: String, title: String, onClick: () -> Unit) {
 
 /**
  * خروجی نمایشی Schema فعال.
- * این صفحه برای کنترل توسعه نشان می‌دهد که ماژول‌ها و فیلدهای UI از Profile خوانده شده‌اند.
+ * این صفحه نشان می‌دهد ماژول‌ها و فیلدهای UI از Profile خوانده شده‌اند.
  */
 @Composable
-private fun ProfileSchemaPage(runtime: RuntimeContext) {
+private fun ProfileSchemaPage(
+    runtime: RuntimeContext,
+    onOpenProductForm: () -> Unit
+) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text("بخش‌های ${runtime.businessProfile.name}", style = MaterialTheme.typography.titleLarge)
+
+        if (runtime.isModuleEnabled(BusinessModule.PRODUCT)) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onOpenProductForm
+            ) {
+                Text("ثبت ${runtime.terminology.productLabel}")
+            }
+        }
+
         Text("ماژول‌های فعال", fontWeight = FontWeight.Bold)
         runtime.businessProfile.enabledModules.sortedBy { it.name }.forEach { module ->
             Card(Modifier.fillMaxWidth()) { Text(module.name, Modifier.padding(14.dp)) }
