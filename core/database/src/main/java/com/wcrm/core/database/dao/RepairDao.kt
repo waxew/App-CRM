@@ -2,7 +2,14 @@ package com.wcrm.core.database.dao
 
 import androidx.room.Dao
 
+/**
+ * رابط دسترسی به داده‌های تیکت‌های تعمیر در Room.
+ *
+ * عملیات SQL مربوط به دریافت، ثبت، بروزرسانی و تغییر وضعیت تعمیرات باید در این
+ * DAO متمرکز شود. منطق تجاری مانند اعتبارسنجی هزینه، وضعیت مجاز بعدی یا قوانین
+ * تحویل دستگاه در لایه Domain باقی می‌ماند.
+ */
 @Dao
 interface RepairDao {
-    // Repair ticket database operations will be implemented here.
+    // عملیات دیتابیسی تیکت‌های تعمیر در ادامه توسعه این بخش اضافه می‌شوند.
 }
