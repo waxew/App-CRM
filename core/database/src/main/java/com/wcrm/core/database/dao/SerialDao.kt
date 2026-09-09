@@ -2,7 +2,15 @@ package com.wcrm.core.database.dao
 
 import androidx.room.Dao
 
+/**
+ * درگاه دسترسی به داده‌های IMEI و شماره‌سریال در پایگاه‌داده.
+ *
+ * این DAO برای خواندن و نوشتن شناسه‌های سخت‌افزاری مرتبط با محصولات استفاده می‌شود.
+ * قواعدی مانند یکتا بودن، اعتبارسنجی قالب IMEI یا سیاست اتصال سریال به محصول باید
+ * در لایه Domain یا Repository اعمال شوند و DAO صرفاً مسئول دسترسی به داده باقی بماند.
+ *
+ * عملیات واقعی این بخش در ادامه توسعه به همین رابط اضافه می‌شوند.
+ */
 @Dao
 interface SerialDao {
-    // IMEI and serial management operations will be implemented here.
 }
