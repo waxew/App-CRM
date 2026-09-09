@@ -1,5 +1,7 @@
 package com.wcrm.core.database.dao
 
+import androidx.room.Dao
+
 /**
  * درگاه دسترسی به داده‌های موجودی و گردش انبار در لایه Room.
  *
@@ -10,5 +12,6 @@ package com.wcrm.core.database.dao
  *
  * عملیات Room این بخش در مراحل توسعه بعدی به‌صورت تدریجی به همین رابط اضافه می‌شوند.
  */
+@Dao
 interface InventoryDao {
 }
