@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.wcrm.core.database.AppDatabase
 import com.wcrm.core.database.dao.CustomerDao
+import com.wcrm.core.database.dao.InvoiceDao
+import com.wcrm.core.database.dao.ProductDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,4 +37,12 @@ object DatabaseModule {
     /** DAO مشتری را از نمونه مشترک پایگاه‌داده در اختیار Repository قرار می‌دهد. */
     @Provides
     fun provideCustomerDao(database: AppDatabase): CustomerDao = database.customerDao()
+
+    /** DAO محصول را برای Repository محصول فراهم می‌کند. */
+    @Provides
+    fun provideProductDao(database: AppDatabase): ProductDao = database.productDao()
+
+    /** DAO فاکتور را برای Repository فاکتور فراهم می‌کند. */
+    @Provides
+    fun provideInvoiceDao(database: AppDatabase): InvoiceDao = database.invoiceDao()
 }
