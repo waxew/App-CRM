@@ -1,17 +1,7 @@
 package com.wcrm.feature.dashboard
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -19,52 +9,49 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wcrm.business.profile.schema.BusinessProfile
+import com.wcrm.business.profile.schema.DashboardWidgetDefinition
 
 /**
- * داشبورد اصلی W-CRM.
- * TopBar در App Shell نگه‌داری می‌شود تا همه Featureها یک سربرگ مشترک داشته باشند.
+ * داشبورد Profile-aware برنامه.
+ * عنوان‌ها و کارت‌ها مستقیماً از BusinessProfile فعال خوانده می‌شوند و برای هر صنف متفاوت‌اند.
  */
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(profile: BusinessProfile) {
+    val widgets = profile.dashboardWidgets.sortedBy { it.order }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(text = "خلاصه امروز", style = MaterialTheme.typography.titleLarge)
-
-            MetricRow(
-                firstTitle = "فروش امروز",
-                firstValue = "۰ تومان",
-                secondTitle = "مشتریان",
-                secondValue = "۰"
-            )
-            MetricRow(
-                firstTitle = "محصولات",
-                firstValue = "۰",
-                secondTitle = "موجودی کم",
-                secondValue = "۰"
+            Text(profile.name, style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = "نمای تخصصی ${profile.terminology.saleLabel}",
+                style = MaterialTheme.typography.bodyMedium
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            widgets.chunked(2).forEach { rowWidgets ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    rowWidgets.forEach { widget ->
+                        DashboardMetricCard(widget, Modifier.weight(1f))
+                    }
+                    if (rowWidgets.size == 1) Spacer(Modifier.weight(1f))
+                }
+            }
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(text = "وضعیت سیستم", style = MaterialTheme.typography.titleMedium)
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("پروفایل فعال", style = MaterialTheme.typography.titleMedium)
+                    Text("${profile.name} • ${profile.id}")
+                    Text("Theme: ${profile.theme.themeKey}", style = MaterialTheme.typography.bodySmall)
                     Text(
-                        text = "هسته CRM، Room، Repository و Business Profile فعال هستند.",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "مرحله بعد: اتصال داده‌های واقعی Dashboard به ViewModel و UseCaseها.",
+                        "${profile.attributes.size} فیلد تخصصی و ${profile.enabledModules.size} ماژول فعال",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -73,36 +60,14 @@ fun DashboardScreen() {
     }
 }
 
-/** ردیف دو ستونه متریک؛ وزن ستون‌ها در Scope صحیح Row اعمال می‌شود. */
+/** کارت مشترک؛ عنوان و آیکون معنایی از Profile Schema می‌آید. */
 @Composable
-private fun MetricRow(
-    firstTitle: String,
-    firstValue: String,
-    secondTitle: String,
-    secondValue: String
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        DashboardMetricCard(firstTitle, firstValue, Modifier.weight(1f))
-        DashboardMetricCard(secondTitle, secondValue, Modifier.weight(1f))
-    }
-}
-
-@Composable
-private fun DashboardMetricCard(
-    title: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
+private fun DashboardMetricCard(widget: DashboardWidgetDefinition, modifier: Modifier = Modifier) {
     Card(modifier = modifier) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(text = title, style = MaterialTheme.typography.bodyMedium)
-            Text(text = value, fontSize = 20.sp, style = MaterialTheme.typography.titleMedium)
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(widget.title, style = MaterialTheme.typography.bodyMedium)
+            Text("۰", fontSize = 20.sp, style = MaterialTheme.typography.titleMedium)
+            Text(widget.iconKey, style = MaterialTheme.typography.labelSmall)
         }
     }
 }

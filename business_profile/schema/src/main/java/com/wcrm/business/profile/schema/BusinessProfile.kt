@@ -14,8 +14,9 @@ enum class BusinessModule {
 }
 
 /**
- * تعریف کامل یک پروفایل کسب‌وکار.
- * enabled فقط توسط توسعه‌دهنده تنظیم می‌شود و در UI گزینه انتخاب صنف نمایش داده نمی‌شود.
+ * قرارداد کامل یک Business Profile.
+ * انتخاب صنف فقط در AppConfig انجام می‌شود؛ UI اجازه تغییر Profile را ندارد.
+ * تمام فیلدها، ویجت‌ها، واژگان و کلیدهای بصری از همین قرارداد خوانده می‌شوند.
  */
 data class BusinessProfile(
     val id: String,
@@ -23,5 +24,8 @@ data class BusinessProfile(
     val enabled: Boolean,
     val enabledModules: Set<BusinessModule>,
     val attributes: List<AttributeDefinition> = emptyList(),
+    val dashboardWidgets: List<DashboardWidgetDefinition> = emptyList(),
+    val theme: ProfileThemeDefinition = ProfileThemeDefinition(id, id, id),
+    val terminology: ProfileTerminology = ProfileTerminology(),
     val visualKey: String = id
 )

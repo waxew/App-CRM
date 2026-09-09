@@ -20,7 +20,7 @@ private enum class AppSection { HOME, SETTINGS, NOTIFICATIONS, ABOUT, CONTACT, S
 
 /**
  * پوسته عمومی همه برنامه‌های ساخته‌شده از این Core.
- * Header، Drawer و سیاست Back در یک نقطه نگه‌داری می‌شوند.
+ * Header، Drawer و سیاست Back در یک نقطه نگه‌داری می‌شوند و محتوای تخصصی از Runtime Profile می‌آید.
  */
 @Composable
 fun WCrmApp() {
@@ -59,8 +59,8 @@ fun WCrmApp() {
         ) { padding ->
             Box(Modifier.padding(padding).fillMaxSize()) {
                 when (section) {
-                    AppSection.HOME -> DashboardScreen()
-                    AppSection.SETTINGS -> SimplePage("تنظیمات")
+                    AppSection.HOME -> DashboardScreen(runtime.businessProfile)
+                    AppSection.SETTINGS -> SimplePage("تنظیمات\nپروفایل فعال: ${runtime.businessProfile.name}\nTheme: ${runtime.theme.themeKey}")
                     AppSection.NOTIFICATIONS -> SimplePage("اعلان‌ها\nشما اعلان جدیدی ندارید")
                     AppSection.ABOUT -> SimplePage("درباره نرم‌افزار\n${AppConfig.Company.aboutText}\n\n${AppConfig.Company.displayName}")
                     AppSection.CONTACT -> SimplePage("تماس با ما\n${AppConfig.Company.contactText}\n\n${AppConfig.Company.supportEmail}")
@@ -140,9 +140,7 @@ private fun DrawerRow(icon: String, title: String, onClick: () -> Unit) {
 
 @Composable
 private fun SimplePage(text: String) {
-    Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.TopCenter) {
-        Text(text)
-    }
+    Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.TopCenter) { Text(text) }
 }
 
 @Composable
@@ -151,7 +149,7 @@ private fun BackupRestorePage() {
         Text("پشتیبان‌گیری و بازیابی", fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(24.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Button(onClick = { /* اتصال به BackupManager در مرحله Data I/O */ }) { Text("Backup") }
+            Button(onClick = { /* اتصال به BackupManager در فاز Data I/O */ }) { Text("Backup") }
             OutlinedButton(onClick = { /* اتصال به File Picker و RestoreManager */ }) { Text("Restore") }
         }
     }
