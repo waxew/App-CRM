@@ -1,6 +1,13 @@
 package com.wcrm.core.database
 
-// Room database entry point will be implemented here.
-// This layer remains independent from UI and business profiles.
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.wcrm.core.database.entity.CustomerEntity
 
-class AppDatabase
+@Database(
+    entities = [CustomerEntity::class],
+    version = 1,
+    exportSchema = true
+)
+abstract class AppDatabase : RoomDatabase() {
+}
