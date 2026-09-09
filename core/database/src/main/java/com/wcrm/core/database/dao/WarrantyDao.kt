@@ -2,7 +2,15 @@ package com.wcrm.core.database.dao
 
 import androidx.room.Dao
 
+/**
+ * درگاه دسترسی به داده‌های گارانتی در پایگاه‌داده Room.
+ *
+ * این DAO برای ذخیره و بازیابی اطلاعات گارانتی محصولات استفاده می‌شود.
+ * قوانین تجاری مانند معتبر بودن بازه زمانی، وضعیت گارانتی یا شرایط فعال/منقضی بودن
+ * باید در لایه Domain مدیریت شوند و DAO فقط مسئول عملیات داده‌ای باشد.
+ *
+ * عملیات واقعی این بخش در ادامه توسعه به همین رابط اضافه می‌شوند.
+ */
 @Dao
 interface WarrantyDao {
-    // Warranty database operations will be implemented here.
 }
