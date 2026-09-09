@@ -4,12 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import com.wcrm.feature.dashboard.DashboardScreen
 
 /**
  * نقطه ورود اصلی برنامه W-CRM.
- * این Activity در نسخه‌های بعدی میزبان Navigation Compose و Runtime Bootstrap خواهد بود.
+ *
+ * Activity فقط میزبان Compose است و منطق کسب‌وکار در Feature/Core نگه داشته می‌شود.
+ * با تکمیل Navigation، مقصدهای دیگر از همین لایه ثبت و مدیریت خواهند شد.
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,16 +18,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                WCrmRoot()
+                DashboardScreen()
             }
         }
     }
-}
-
-/**
- * صفحه موقت ریشه برنامه تا زمان اتصال کامل Dashboard و Navigation.
- */
-@Composable
-private fun WCrmRoot() {
-    Text(text = "W-CRM")
 }
