@@ -1,5 +1,7 @@
 package com.wcrm.core.database.dao
 
+import androidx.room.Dao
+
 /**
  * درگاه دسترسی به داده‌های فاکتور در لایه Room.
  *
@@ -9,5 +11,6 @@ package com.wcrm.core.database.dao
  *
  * عملیات Room این بخش در ادامه توسعه به‌صورت مرحله‌ای به همین رابط اضافه می‌شوند.
  */
+@Dao
 interface InvoiceDao {
 }
