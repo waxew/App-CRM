@@ -4,11 +4,13 @@ import com.wcrm.core.domain.repository.CustomerRepository
 import com.wcrm.core.domain.repository.InventoryRepository
 import com.wcrm.core.domain.repository.InvoiceRepository
 import com.wcrm.core.domain.repository.ProductRepository
+import com.wcrm.core.domain.repository.RepairRepository
 import com.wcrm.core.domain.repository.WarrantyRepository
 import com.wcrm.core.repository.customer.CustomerRepositoryImpl
 import com.wcrm.core.repository.inventory.InventoryRepositoryImpl
 import com.wcrm.core.repository.invoice.InvoiceRepositoryImpl
 import com.wcrm.core.repository.product.ProductRepositoryImpl
+import com.wcrm.core.repository.repair.RepairRepositoryImpl
 import com.wcrm.core.repository.warranty.WarrantyRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -51,4 +53,10 @@ abstract class RepositoryModule {
     abstract fun bindWarrantyRepository(
         implementation: WarrantyRepositoryImpl
     ): WarrantyRepository
+
+    /** پیاده‌سازی Repository تعمیرات را در اختیار Domain قرار می‌دهد. */
+    @Binds
+    abstract fun bindRepairRepository(
+        implementation: RepairRepositoryImpl
+    ): RepairRepository
 }
