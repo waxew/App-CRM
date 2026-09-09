@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.wcrm.core.database.AppDatabase
 import com.wcrm.core.database.dao.CustomerDao
+import com.wcrm.core.database.dao.InventoryDao
 import com.wcrm.core.database.dao.InvoiceDao
 import com.wcrm.core.database.dao.ProductDao
 import dagger.Module
@@ -45,4 +46,8 @@ object DatabaseModule {
     /** DAO فاکتور را برای Repository فاکتور فراهم می‌کند. */
     @Provides
     fun provideInvoiceDao(database: AppDatabase): InvoiceDao = database.invoiceDao()
+
+    /** DAO گردش موجودی را برای Repository انبار فراهم می‌کند. */
+    @Provides
+    fun provideInventoryDao(database: AppDatabase): InventoryDao = database.inventoryDao()
 }
