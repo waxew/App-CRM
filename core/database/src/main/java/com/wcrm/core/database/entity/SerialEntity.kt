@@ -14,6 +14,7 @@ import androidx.room.PrimaryKey
  * @property imei شناسه IMEI در صورت وجود.
  * @property serialNumber شماره سریال محصول در صورت وجود.
  * @property productId شناسه محصول مرتبط با این شناسه سریالی.
+ * @property createdAt زمان ثبت رکورد سریال در سیستم.
  */
 @Entity(tableName = "serials")
 data class SerialEntity(
@@ -21,5 +22,6 @@ data class SerialEntity(
     val id: Long = 0,
     val imei: String? = null,
     val serialNumber: String? = null,
-    val productId: Long
+    val productId: Long,
+    val createdAt: Long
 )
