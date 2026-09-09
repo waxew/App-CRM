@@ -1,7 +1,7 @@
 package com.wcrm.core.domain.usecase.customer
 
 import com.wcrm.core.domain.repository.CustomerRepository
-import com.wcrm.core.model.Customer
+import com.wcrm.core.model.customer.Customer
 import kotlinx.coroutines.flow.Flow
 
 /**
