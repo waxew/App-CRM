@@ -12,6 +12,7 @@ import com.wcrm.core.database.dao.WarrantyDao
 import com.wcrm.core.database.entity.CustomerEntity
 import com.wcrm.core.database.entity.InventoryEntity
 import com.wcrm.core.database.entity.InvoiceEntity
+import com.wcrm.core.database.entity.InvoiceItemEntity
 import com.wcrm.core.database.entity.ProductEntity
 import com.wcrm.core.database.entity.RepairEntity
 import com.wcrm.core.database.entity.SerialEntity
@@ -33,6 +34,7 @@ import com.wcrm.core.database.entity.WarrantyEntity
         CustomerEntity::class,
         ProductEntity::class,
         InvoiceEntity::class,
+        InvoiceItemEntity::class,
         InventoryEntity::class,
         WarrantyEntity::class,
         RepairEntity::class,
@@ -49,7 +51,7 @@ abstract class AppDatabase : RoomDatabase() {
     /** دسترسی به اطلاعات محصولات. */
     abstract fun productDao(): ProductDao
 
-    /** دسترسی به فاکتورها. */
+    /** دسترسی به فاکتورها و اقلام آن‌ها. */
     abstract fun invoiceDao(): InvoiceDao
 
     /** دسترسی به گردش موجودی کالا. */
