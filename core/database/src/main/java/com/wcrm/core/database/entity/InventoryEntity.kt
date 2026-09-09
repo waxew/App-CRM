@@ -12,7 +12,8 @@ import androidx.room.PrimaryKey
  * @property id شناسه یکتای گردش موجودی که توسط Room تولید می‌شود.
  * @property productId شناسه محصولی که موجودی آن تغییر کرده است.
  * @property quantity مقدار تغییر موجودی.
- * @property movementType نوع گردش مانند ورود، خروج، فروش یا اصلاح.
+ * @property movementType نوع گردش مانند ورود، خروج، فروش، برگشت یا اصلاح.
+ * @property note توضیح اختیاری درباره علت یا منبع تغییر موجودی.
  * @property createdAt زمان ثبت گردش موجودی.
  */
 @Entity(tableName = "inventory_movements")
@@ -22,5 +23,6 @@ data class InventoryEntity(
     val productId: Long,
     val quantity: Int,
     val movementType: String,
+    val note: String? = null,
     val createdAt: Long
 )
