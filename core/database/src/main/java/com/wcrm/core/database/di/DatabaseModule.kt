@@ -7,6 +7,7 @@ import com.wcrm.core.database.dao.CustomerDao
 import com.wcrm.core.database.dao.InventoryDao
 import com.wcrm.core.database.dao.InvoiceDao
 import com.wcrm.core.database.dao.ProductDao
+import com.wcrm.core.database.dao.WarrantyDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,4 +51,8 @@ object DatabaseModule {
     /** DAO گردش موجودی را برای Repository انبار فراهم می‌کند. */
     @Provides
     fun provideInventoryDao(database: AppDatabase): InventoryDao = database.inventoryDao()
+
+    /** DAO گارانتی را برای Repository گارانتی فراهم می‌کند. */
+    @Provides
+    fun provideWarrantyDao(database: AppDatabase): WarrantyDao = database.warrantyDao()
 }
