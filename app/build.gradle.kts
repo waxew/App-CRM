@@ -30,6 +30,7 @@ kotlin { jvmToolchain(17) }
 
 dependencies {
     implementation(project(":runtime"))
+    implementation(project(":business_profile:schema"))
     implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
