@@ -1,11 +1,18 @@
 package com.wcrm.core.repository.di
 
+import com.wcrm.core.repository.customer.CustomerRepositoryImpl
+import com.wcrm.core.domain.repository.CustomerRepository
+import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
-    // Repository bindings will be added here.
+abstract class RepositoryModule {
+
+    @Binds
+    abstract fun bindCustomerRepository(
+        implementation: CustomerRepositoryImpl
+    ): CustomerRepository
 }
