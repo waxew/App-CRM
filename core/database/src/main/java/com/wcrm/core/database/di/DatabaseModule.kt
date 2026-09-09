@@ -3,6 +3,7 @@ package com.wcrm.core.database.di
 import android.content.Context
 import androidx.room.Room
 import com.wcrm.core.database.AppDatabase
+import com.wcrm.core.database.dao.CustomerDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,20 +14,14 @@ import javax.inject.Singleton
 /**
  * ماژول Hilt برای ساخت و تزریق نمونه یکتای پایگاه‌داده Room.
  *
- * این ماژول نقطه مرکزی ایجاد [AppDatabase] است تا تمام بخش‌های برنامه از یک نمونه مشترک
- * استفاده کنند. نام فایل پایگاه‌داده و تنظیمات ساخت Room در این لایه نگه داشته می‌شوند
- * و Featureها نباید مستقیماً Room را مقداردهی اولیه کنند.
+ * این ماژول نقطه مرکزی ایجاد [AppDatabase] و ارائه DAOهای پایگاه‌داده است تا
+ * Featureها و Repositoryها مستقیماً مسئول ساخت Room نباشند.
  */
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    /**
-     * نمونه Singleton از [AppDatabase] را برای کل چرخه عمر برنامه فراهم می‌کند.
-     *
-     * با استفاده از [ApplicationContext] از نگه‌داری ناخواسته Activity/Screen Context
-     * و ایجاد نشت حافظه جلوگیری می‌شود.
-     */
+    /** نمونه Singleton از [AppDatabase] را برای کل چرخه عمر برنامه فراهم می‌کند. */
     @Provides
     @Singleton
     fun provideDatabase(
@@ -36,4 +31,8 @@ object DatabaseModule {
         AppDatabase::class.java,
         "wcrm_database"
     ).build()
+
+    /** DAO مشتری را از نمونه مشترک پایگاه‌داده در اختیار Repository قرار می‌دهد. */
+    @Provides
+    fun provideCustomerDao(database: AppDatabase): CustomerDao = database.customerDao()
 }
