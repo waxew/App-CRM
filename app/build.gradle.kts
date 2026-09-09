@@ -18,17 +18,19 @@ android {
         versionName = "1.0.0"
     }
 
-    buildFeatures {
-        compose = true
+    buildFeatures { compose = true }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
-kotlin {
-    jvmToolchain(17)
-}
+kotlin { jvmToolchain(17) }
 
 dependencies {
     implementation(project(":runtime"))
+    implementation(project(":core:common"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
     implementation(project(":core:database"))

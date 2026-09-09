@@ -6,12 +6,11 @@ plugins {
 android {
     namespace = "com.wcrm.core.common"
     compileSdk = 35
-
-    defaultConfig {
-        minSdk = 26
+    defaultConfig { minSdk = 26 }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
-kotlin {
-    jvmToolchain(17)
-}
+kotlin { jvmToolchain(17) }
