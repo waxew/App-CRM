@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:model"))
 
+    implementation(libs.androidx.room.ktx)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 }
