@@ -3,7 +3,9 @@ package com.wcrm.app
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,9 +16,10 @@ import androidx.compose.ui.unit.dp
 import com.wcrm.core.common.config.AppConfig
 import com.wcrm.feature.dashboard.DashboardScreen
 import com.wcrm.runtime.RuntimeBootstrap
+import com.wcrm.runtime.RuntimeContext
 import kotlinx.coroutines.launch
 
-private enum class AppSection { HOME, SETTINGS, NOTIFICATIONS, ABOUT, CONTACT, SHARE, BACKUP, UPDATE }
+private enum class AppSection { HOME, MODULES, SETTINGS, NOTIFICATIONS, ABOUT, CONTACT, SHARE, BACKUP, UPDATE }
 
 /**
  * پوسته عمومی همه برنامه‌های ساخته‌شده از این Core.
@@ -53,13 +56,14 @@ fun WCrmApp() {
             topBar = {
                 AppTopBar(
                     onDrawerClick = { scope.launch { drawerState.open() } },
-                    onModulesClick = { section = AppSection.SETTINGS }
+                    onModulesClick = { section = AppSection.MODULES }
                 )
             }
         ) { padding ->
             Box(Modifier.padding(padding).fillMaxSize()) {
                 when (section) {
                     AppSection.HOME -> DashboardScreen(runtime.businessProfile)
+                    AppSection.MODULES -> ProfileSchemaPage(runtime)
                     AppSection.SETTINGS -> SimplePage("تنظیمات\nپروفایل فعال: ${runtime.businessProfile.name}\nTheme: ${runtime.theme.themeKey}")
                     AppSection.NOTIFICATIONS -> SimplePage("اعلان‌ها\nشما اعلان جدیدی ندارید")
                     AppSection.ABOUT -> SimplePage("درباره نرم‌افزار\n${AppConfig.Company.aboutText}\n\n${AppConfig.Company.displayName}")
@@ -135,6 +139,35 @@ private fun DrawerRow(icon: String, title: String, onClick: () -> Unit) {
         Text(icon)
         Spacer(Modifier.width(16.dp))
         Text(title)
+    }
+}
+
+/**
+ * خروجی نمایشی Schema فعال.
+ * این صفحه برای کنترل توسعه نشان می‌دهد که ماژول‌ها و فیلدهای UI از Profile خوانده شده‌اند.
+ */
+@Composable
+private fun ProfileSchemaPage(runtime: RuntimeContext) {
+    Column(
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("بخش‌های ${runtime.businessProfile.name}", style = MaterialTheme.typography.titleLarge)
+        Text("ماژول‌های فعال", fontWeight = FontWeight.Bold)
+        runtime.businessProfile.enabledModules.sortedBy { it.name }.forEach { module ->
+            Card(Modifier.fillMaxWidth()) { Text(module.name, Modifier.padding(14.dp)) }
+        }
+
+        Spacer(Modifier.height(8.dp))
+        Text("فیلدهای تخصصی ${runtime.terminology.productLabel}", fontWeight = FontWeight.Bold)
+        runtime.attributes.forEach { field ->
+            Card(Modifier.fillMaxWidth()) {
+                Row(Modifier.fillMaxWidth().padding(14.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(field.name)
+                    Text(if (field.required) "الزامی" else field.type.name, style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        }
     }
 }
 
