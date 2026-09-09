@@ -1,17 +1,30 @@
 package com.wcrm.core.database.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import com.wcrm.core.database.entity.InventoryEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
- * درگاه دسترسی به داده‌های موجودی و گردش انبار در لایه Room.
+ * درگاه دسترسی به داده‌های گردش موجودی در لایه Room.
  *
- * این DAO مسئول عملیات پایگاه‌داده مربوط به ثبت ورود/خروج کالا، مشاهده گردش‌ها
- * و محاسباتی است که مستقیماً از داده‌های ذخیره‌شده به دست می‌آیند.
- * قوانین تجاری موجودی، مانند حداقل موجودی یا سیاست هشدار کمبود، باید در لایه Domain
- * نگه داشته شوند و این رابط صرفاً مسئول دسترسی به داده باشد.
- *
- * عملیات Room این بخش در مراحل توسعه بعدی به‌صورت تدریجی به همین رابط اضافه می‌شوند.
+ * این DAO فقط مسئول ذخیره و بازیابی رویدادهای تغییر موجودی است.
+ * قوانین کسب‌وکار مانند حداقل موجودی، هشدار کمبود و سیاست انبارداری
+ * باید در لایه Domain پیاده‌سازی شوند.
  */
 @Dao
 interface InventoryDao {
+
+    /** جریان تمام تغییرات موجودی را بر اساس زمان ثبت برمی‌گرداند. */
+    @Query("SELECT * FROM inventory_movements ORDER BY createdAt DESC")
+    fun observeMovements(): Flow<List<InventoryEntity>>
+
+    /** گردش‌های مربوط به یک محصول مشخص را دریافت می‌کند. */
+    @Query("SELECT * FROM inventory_movements WHERE productId = :productId ORDER BY createdAt DESC")
+    fun observeProductMovements(productId: Long): Flow<List<InventoryEntity>>
+
+    /** یک رکورد ورود یا خروج موجودی ثبت می‌کند. */
+    @Insert
+    suspend fun insertMovement(entity: InventoryEntity): Long
 }
