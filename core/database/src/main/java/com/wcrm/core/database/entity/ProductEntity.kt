@@ -17,6 +17,7 @@ import androidx.room.PrimaryKey
  * @property cost قیمت تمام‌شده یا بهای خرید.
  * @property stock موجودی فعلی ثبت‌شده برای محصول.
  * @property createdAt زمان ایجاد رکورد محصول.
+ * @property updatedAt زمان آخرین بروزرسانی رکورد محصول.
  */
 @Entity(tableName = "products")
 data class ProductEntity(
@@ -28,5 +29,6 @@ data class ProductEntity(
     val price: Long,
     val cost: Long,
     val stock: Int,
-    val createdAt: Long
+    val createdAt: Long,
+    val updatedAt: Long
 )
